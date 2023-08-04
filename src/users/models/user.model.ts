@@ -7,11 +7,11 @@ import {
     PrimaryKey,
     AutoIncrement,
 } from 'sequelize-typescript';
-import { Order } from './order.model';
+import { Order } from '../../orders/models/order.model';
 
 @Table({
     tableName: "users",
-    timestamps: false  // Desabilita a criação automática de createdAt e updatedAt
+    timestamps: false  
 })
 export class User extends Model {
     @PrimaryKey
