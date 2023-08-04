@@ -15,6 +15,4 @@ export class PlansController {
   findAll() {
     return this.plansService.findAll();
   }
-
-
 }

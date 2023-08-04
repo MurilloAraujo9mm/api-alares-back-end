@@ -8,6 +8,10 @@ import { Plan } from './plans/models/plan.model';
 import { User } from './users/models/user.model';
 import { PlansModule } from './plans/plans.module';
 import { OrdersModule } from './orders/orders.module';
+import { AuthModule } from './auth/auth.module';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -26,8 +30,19 @@ import { OrdersModule } from './orders/orders.module';
     ConfigModule.forRoot(),
     PlansModule,
     OrdersModule,
+    AuthModule,
+    ThrottlerModule.forRoot({
+      ttl: 30, 
+      limit: 5, 
+    }),
   ],
   controllers: [AppController],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
+  
 })
 export class AppModule { }

@@ -1,9 +1,14 @@
+// orders.module.ts
+
 import { Module } from '@nestjs/common';
-import { OrdersService } from './orders.service';
+import { SequelizeModule } from '@nestjs/sequelize';
 import { OrdersController } from './orders.controller';
+import { OrdersService } from './orders.service';
+import { Order } from './models/order.model';
 
 @Module({
+  imports: [SequelizeModule.forFeature([Order])],
   controllers: [OrdersController],
-  providers: [OrdersService]
+  providers: [OrdersService],
 })
 export class OrdersModule {}
