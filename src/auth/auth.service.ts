@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/sequelize';
 import { AuthModel } from './models/auth.model';
@@ -23,12 +23,28 @@ export class AuthService {
   }
 
   async createUser(createUserDto: any): Promise<AuthModel> {
-    const payload = { sub: createUserDto.id, username: createUserDto.username };
+    const { username, email } = createUserDto;
+  
+    const existingEmailUser = await this.authModel.findOne({ where: { email } });
+    if (existingEmailUser) {
+      throw new HttpException('Email já cadastrado', HttpStatus.BAD_REQUEST);
+    }
+  
+    const existingUsernameUser = await this.authModel.findOne({ where: { username } });
+    if (existingUsernameUser) {
+      throw new HttpException('Username já cadastrado', HttpStatus.BAD_REQUEST);
+    }
+  
+    const payload = { sub: createUserDto.id, username: createUserDto.password };
     const token = this.jwtService.sign(payload);
-
-    return this.authModel.create({ ...createUserDto, token });
+  
+    try {
+      return this.authModel.create({ ...createUserDto, token });
+    } catch (error) {
+      throw new HttpException('Failed to create user', HttpStatus.BAD_REQUEST);
+    }
   }
-
+  
   async login(username: string, password: string) {
     const user = await this.validateUser(username, password);
 
