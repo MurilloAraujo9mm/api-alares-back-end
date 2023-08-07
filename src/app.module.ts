@@ -31,18 +31,14 @@ import { ThrottlerGuard } from '@nestjs/throttler';
     PlansModule,
     OrdersModule,
     AuthModule,
-    ThrottlerModule.forRoot({
-      ttl: 30, 
-      limit: 5, 
-    }),
   ],
   controllers: [AppController],
-  providers: [
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard,
-    },
-  ],
+  // providers: [
+  //   {
+  //     provide: APP_GUARD,
+  //     useClass: ThrottlerGuard,
+  //   },
+  // ],
   
 })
 export class AppModule { }

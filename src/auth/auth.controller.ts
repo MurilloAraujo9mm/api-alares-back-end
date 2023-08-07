@@ -7,7 +7,7 @@ import { Throttle } from '@nestjs/throttler';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Throttle(1, 10)  
+  @Throttle(5, 60)  
   @Post('login')
   @HttpCode(200)
   async login(@Body() body: { username: string; password: string }) {

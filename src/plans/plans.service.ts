@@ -14,6 +14,16 @@ export class PlansService {
     return this.planModel.findAll();
   }
 
+  async update(id: number, updatePlanDto: any): Promise<Plan | null> {
+    const plan = await this.planModel.findByPk(id);
+    if (!plan) {
+      return null;
+    }
+
+    await plan.update(updatePlanDto);
+    return plan;
+  }
+
   async findById(id: number): Promise<Plan | null> {
     return this.planModel.findByPk(id);
   }
@@ -22,9 +32,9 @@ export class PlansService {
     return this.planModel.create(createPlanDto);
   }
 
-  async delete(id: number): Promise<number> {
+  async delete(id_plan: number): Promise<number> {
     return this.planModel.destroy({
-      where: { id },
+      where: { id_plan },
     });
   }
 }
