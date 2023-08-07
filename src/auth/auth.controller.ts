@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpException, HttpStatus, Post, Request, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
 import { Throttle } from '@nestjs/throttler';
@@ -17,6 +17,15 @@ export class AuthController {
   
   @Post('create')
   async create(@Body() body) {
-    return this.authService.createUser(body);
+
+    try {
+      return this.authService.createUser(body);
+    } catch (error) {
+      throw new HttpException(`
+      ${error.message},
+      ${error.statusCode},
+     `, HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+    }    
+    
   }
 }

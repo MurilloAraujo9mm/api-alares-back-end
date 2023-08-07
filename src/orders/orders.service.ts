@@ -80,7 +80,6 @@ export class OrdersService {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
-   
     if (updateUserDto.first_name) {
       user.first_name = updateUserDto.first_name;
     }
